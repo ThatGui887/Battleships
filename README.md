@@ -13,6 +13,7 @@ Features:
 
 -Visual indicators for hits and misses
 
+
 Installation:
 
 -Prerequisites
@@ -26,6 +27,7 @@ Installation:
 -Run the Game
 
 -python battleship.py
+
 
 How to Play:
 
@@ -44,6 +46,7 @@ How to Play:
 -Hits are marked with a red circle, misses with an X.
 
 -The game continues until all of one player's ships are sunk.
+
 
 Known Bugs & Fixes:
 
@@ -70,6 +73,7 @@ Fix: Added boundary checks before registering a move.
 Issue: Players could see ships when it wasn't their turn.
 
 Fix: The game now uses view_board to ensure ships remain hidden from the opponent.
+
 
 Future Improvements:
 
