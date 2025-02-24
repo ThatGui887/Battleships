@@ -6,8 +6,11 @@ This is a two-player Battleship game built with Pygame. Players take turns placi
 Features:
 
 -Two-player mode
+
 -Ship placement with preview
+
 -Turn-based gameplay
+
 -Visual indicators for hits and misses
 
 Installation:
