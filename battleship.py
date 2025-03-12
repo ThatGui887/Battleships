@@ -1,37 +1,31 @@
 import pygame
 import random
 
-# Initialize Pygame
 pygame.init()
 
-# Screen settings
-WIDTH, HEIGHT = 600, 750  # Scaled down from 800x1000
+WIDTH, HEIGHT = 600, 750
 GRID_SIZE = 10
-CELL_SIZE = 30  # Reduced from 40 to 30
-GRID_OFFSET_X = (WIDTH - GRID_SIZE * CELL_SIZE) // 2  # Center horizontally (150px)
-GRID1_OFFSET_Y = 50  # Player 1 board at top
-GRID2_OFFSET_Y = 400  # Player 2 board at bottom, adjusted for 100px gap
+CELL_SIZE = 30
+GRID_OFFSET_X = (WIDTH - GRID_SIZE * CELL_SIZE) // 2
+GRID1_OFFSET_Y = 50
+GRID2_OFFSET_Y = 400
 screen = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption("Battleships")
 
-# Colors
 WHITE = (255, 255, 255)
 BLACK = (0, 0, 0)
-BLUE = (0, 0, 255)  # Player 1 miss color
+BLUE = (0, 0, 255)
 RED = (255, 0, 0)
 GRAY = (200, 200, 200)
-GREEN = (0, 255, 0)  # Player 2 miss color (also used for preview)
+GREEN = (0, 255, 0)
 
-# Ship sizes
 SHIPS = [5, 4, 3, 3, 2]
 
-# Player boards
 player1_board = [[0] * GRID_SIZE for _ in range(GRID_SIZE)]
 player2_board = [[0] * GRID_SIZE for _ in range(GRID_SIZE)]
 player1_view = [[0] * GRID_SIZE for _ in range(GRID_SIZE)]
 player2_view = [[0] * GRID_SIZE for _ in range(GRID_SIZE)]
 
-# Game state
 current_player = 1
 placing_ships = True
 current_ship = 0
@@ -99,17 +93,14 @@ def main():
 
     while running:
         screen.fill(WHITE)
+        draw_grid(GRID_OFFSET_X, GRID1_OFFSET_Y, player1_board, current_player == 2, player2_view)
+        draw_grid(GRID_OFFSET_X, GRID2_OFFSET_Y, player2_board, current_player == 1, player1_view)
         
-        # Draw both grids
-        draw_grid(GRID_OFFSET_X, GRID1_OFFSET_Y, player1_board, current_player == 2, player2_view)  # Top
-        draw_grid(GRID_OFFSET_X, GRID2_OFFSET_Y, player2_board, current_player == 1, player1_view)  # Bottom
-
-        # Ship placement preview
         if placing_ships:
             mouse_x, mouse_y = pygame.mouse.get_pos()
             board = player1_board if current_player == 1 else player2_board
             draw_ship_preview(mouse_x, mouse_y, SHIPS[current_ship], ship_horizontal, board, current_player)
-
+        
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
@@ -122,7 +113,7 @@ def main():
                 target_y_offset = GRID2_OFFSET_Y if current_player == 1 else GRID1_OFFSET_Y
                 grid_x = (x - GRID_OFFSET_X) // CELL_SIZE
                 grid_y = (y - grid_y_offset) // CELL_SIZE
-
+                
                 if placing_ships:
                     board = player1_board if current_player == 1 else player2_board
                     if 0 <= grid_x < GRID_SIZE and 0 <= grid_y < GRID_SIZE:
@@ -147,19 +138,15 @@ def main():
                             else:
                                 view_board[grid_y][grid_x] = 3
                             current_player = 2 if current_player == 1 else 1
-
-        # Turn indicator
-        font = pygame.font.Font(None, 36)  # Reduced from 48 to 36 to fit smaller screen
-        if placing_ships:
-            text = font.render(f"Player {current_player} placing ships ({SHIPS[current_ship]} cells)", True, BLACK)
-        else:
-            text = font.render(f"Player {current_player}'s Turn", True, BLACK)
+        
+        font = pygame.font.Font(None, 36)
+        text = font.render(f"Player {current_player} placing ships ({SHIPS[current_ship]} cells)" if placing_ships else f"Player {current_player}'s Turn", True, BLACK)
         text_rect = text.get_rect(center=(WIDTH // 2, (GRID1_OFFSET_Y + GRID_SIZE * CELL_SIZE + GRID2_OFFSET_Y) // 2))
         screen.blit(text, text_rect)
-
+        
         pygame.display.flip()
         clock.tick(60)
-
+    
     pygame.quit()
 
 if __name__ == "__main__":
